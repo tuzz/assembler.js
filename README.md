@@ -11,5 +11,5 @@ brew install v8
 ## Usage
 
 ```
-d8 assembler.js -- file.asm
+d8 lib/assembler.js -- file.asm
 ```
