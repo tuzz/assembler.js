@@ -66,13 +66,13 @@ test("symbol recognises decimals", function () {
   var parser = new ASSEMBLER.Parser();
 
   parser.advance();
-  equal(parser.symbol(), "123");
+  equal(parser.symbol(), "123", "@123");
 
   parser.advance();
-  equal(parser.symbol(), "0");
+  equal(parser.symbol(), "0", "@0");
 
   parser.advance();
-  equal(parser.symbol(), "7");
+  equal(parser.symbol(), "7", "(7)");
 });
 
 test("symbol recognises symbols", function () {
@@ -80,16 +80,16 @@ test("symbol recognises symbols", function () {
   var parser = new ASSEMBLER.Parser();
 
   parser.advance();
-  equal(parser.symbol(), "foo");
+  equal(parser.symbol(), "foo", "@foo");
 
   parser.advance();
-  equal(parser.symbol(), "R1");
+  equal(parser.symbol(), "R1", "@R1");
 
   parser.advance();
-  equal(parser.symbol(), "LOOP");
+  equal(parser.symbol(), "LOOP", "(LOOP)");
 
   parser.advance();
-  equal(parser.symbol(), "R0");
+  equal(parser.symbol(), "R0", "(R0)");
 });
 
 test("dest returns the AMD (or null) mneumonic", function () {
@@ -97,22 +97,22 @@ test("dest returns the AMD (or null) mneumonic", function () {
   var parser = new ASSEMBLER.Parser();
 
   parser.advance();
-  equal(parser.dest(), "A");
+  equal(parser.dest(), "A", "A=0");
 
   parser.advance();
-  equal(parser.dest(), "M");
+  equal(parser.dest(), "M", "M=1;JEQ");
 
   parser.advance();
-  equal(parser.dest(), "D");
+  equal(parser.dest(), "D", "D=A");
 
   parser.advance();
-  equal(parser.dest(), "AM");
+  equal(parser.dest(), "AM", "AM=A;JNE");
 
   parser.advance();
-  equal(parser.dest(), "AMD");
+  equal(parser.dest(), "AMD", "AMD=-1");
 
   parser.advance();
-  equal(parser.dest(), "null");
+  equal(parser.dest(), "null", "0;JGT");
 });
 
 test("comp returns the ALU mneumonic from the pool of 18 commands", function () {
@@ -120,31 +120,31 @@ test("comp returns the ALU mneumonic from the pool of 18 commands", function () 
   var parser = new ASSEMBLER.Parser();
 
   parser.advance();
-  equal(parser.comp(), "0");
+  equal(parser.comp(), "0", "A=0");
 
   parser.advance();
-  equal(parser.comp(), "-1");
+  equal(parser.comp(), "-1", "M=-1;JNE");
 
   parser.advance();
-  equal(parser.comp(), "D");
+  equal(parser.comp(), "D", "D=D");
 
   parser.advance();
-  equal(parser.comp(), "!A");
+  equal(parser.comp(), "!A", "AM=!A");
 
   parser.advance();
-  equal(parser.comp(), "-D");
+  equal(parser.comp(), "-D", "-D;JLT");
 
   parser.advance();
-  equal(parser.comp(), "A+1");
+  equal(parser.comp(), "A+1", "A+1;JGT");
 
   parser.advance();
-  equal(parser.comp(), "D-A");
+  equal(parser.comp(), "D-A", "M=D-A");
 
   parser.advance();
-  equal(parser.comp(), "D&A");
+  equal(parser.comp(), "D&A", "M=D&A");
 
   parser.advance();
-  equal(parser.comp(), "D|A");
+  equal(parser.comp(), "D|A", "AMD=D|A;JMP");
 });
 
 test("jump returns one of the jump mneumonics", function () {
@@ -152,19 +152,19 @@ test("jump returns one of the jump mneumonics", function () {
   var parser = new ASSEMBLER.Parser();
 
   parser.advance();
-  equal(parser.jump(), "JEQ");
+  equal(parser.jump(), "JEQ", "A=0;JEQ");
 
   parser.advance();
-  equal(parser.jump(), "JNE");
+  equal(parser.jump(), "JNE", "MD=D-1;JNE");
 
   parser.advance();
-  equal(parser.jump(), "JMP");
+  equal(parser.jump(), "JMP", "-1;JMP");
 
   parser.advance();
-  equal(parser.jump(), "JLT");
+  equal(parser.jump(), "JLT", "AMD=A&D;JLT");
 
   parser.advance();
-  equal(parser.jump(), "JGE");
+  equal(parser.jump(), "JGE", "A|D;JGE");
 });
 
 test("it removes whitespace and empty lines", function () {
@@ -175,16 +175,16 @@ test("it removes whitespace and empty lines", function () {
   parser.advance();
   ok(parser.hasMoreCommands(), "line 1");
 
-  equal(parser.commandType(), "C_COMMAND");
-  equal(parser.dest(), "AMD");
-  equal(parser.comp(), "A-1");
-  equal(parser.jump(), "JMP");
+  equal(parser.commandType(), "C_COMMAND", "AMD=A-1;JMP");
+  equal(parser.dest(), "AMD", "AMD=A-1;JMP");
+  equal(parser.comp(), "A-1", "AMD=A-1;JMP");
+  equal(parser.jump(), "JMP", "AMD=A-1;JMP");
 
   parser.advance();
   ok(parser.hasMoreCommands(), "line 2");
 
-  equal(parser.commandType(), "A_COMMAND");
-  equal(parser.symbol(), "111");
+  equal(parser.commandType(), "A_COMMAND", "@111");
+  equal(parser.symbol(), "111", "@111");
 
   parser.advance();
   ok(!parser.hasMoreCommands(), "line 3");
@@ -195,7 +195,7 @@ test("it removes comments", function () {
   var parser = new ASSEMBLER.Parser();
 
   parser.advance();
-  equal(parser.symbol(), "123");
+  equal(parser.symbol(), "123", "@123");
 
   parser.advance();
   ok(!parser.hasMoreCommands());
