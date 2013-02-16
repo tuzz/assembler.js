@@ -166,3 +166,37 @@ test("jump returns one of the jump mneumonics", function () {
   parser.advance();
   equal(parser.jump(), "JGE");
 });
+
+test("it removes whitespace and empty lines", function () {
+  setInput("\n\n A M   D  = A - 1 ; J    M P  \n\n\n @ 1 1  1 \n\n");
+  var parser = new ASSEMBLER.Parser();
+
+  ok(parser.hasMoreCommands());
+  parser.advance();
+  ok(parser.hasMoreCommands(), "line 1");
+
+  equal(parser.commandType(), "C_COMMAND");
+  equal(parser.dest(), "AMD");
+  equal(parser.comp(), "A-1");
+  equal(parser.jump(), "JMP");
+
+  parser.advance();
+  ok(parser.hasMoreCommands(), "line 2");
+
+  equal(parser.commandType(), "A_COMMAND");
+  equal(parser.symbol(), "111");
+
+  parser.advance();
+  ok(!parser.hasMoreCommands(), "line 3");
+});
+
+test("it removes comments", function () {
+  setInput("// comment\n@123\n  // comment  ");
+  var parser = new ASSEMBLER.Parser();
+
+  parser.advance();
+  equal(parser.symbol(), "123");
+
+  parser.advance();
+  ok(!parser.hasMoreCommands());
+});
