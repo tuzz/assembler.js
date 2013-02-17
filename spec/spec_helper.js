@@ -10,4 +10,10 @@ var setInput = function (input) {
   };
 };
 
+var bindOutput = function (f) {
+  ASSEMBLER.io.write = function (content) {
+    f(content);
+  };
+};
+
 load("lib/assembler.js");

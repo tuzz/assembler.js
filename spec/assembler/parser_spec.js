@@ -191,7 +191,7 @@ test("it removes whitespace and empty lines", function () {
 });
 
 test("it removes comments", function () {
-  setInput("// comment\n@123\n  // comment  ");
+  setInput("// comment\n@123//foo\n  // comment  ");
   var parser = new ASSEMBLER.Parser();
 
   parser.advance();
