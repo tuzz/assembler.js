@@ -185,10 +185,14 @@ test("it removes whitespace and empty lines", function () {
 });
 
 test("it removes comments", function () {
-  setInput("// comment\n@123//foo\n  // comment  ");
+  setInput("// comment\n@123//foo\n@321\n  // comment  ");
   var parser = new ASSEMBLER.Parser();
 
   parser.advance();
   equal(parser.symbol(), "123", "@123");
-  ok(!parser.hasMoreCommands(), "check if there's a line 2");
+
+  parser.advance();
+  equal(parser.symbol(), "321", "@321");
+
+  ok(!parser.hasMoreCommands(), "check if there's a line 3");
 });
