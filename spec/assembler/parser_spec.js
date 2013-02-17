@@ -2,7 +2,7 @@ test("hasMoreCommands returns true initially", function () {
   setInput("foo\nbar");
   var parser = new ASSEMBLER.Parser();
 
-  ok(parser.hasMoreCommands());
+  ok(parser.hasMoreCommands(), "check if there's a line 1");
 });
 
 test("hasMoreCommands return false after exhausting all lines", function () {
@@ -10,13 +10,10 @@ test("hasMoreCommands return false after exhausting all lines", function () {
   var parser = new ASSEMBLER.Parser();
 
   parser.advance();
-  ok(parser.hasMoreCommands(), "line 1");
+  ok(parser.hasMoreCommands(), "check if there's a line 2");
 
   parser.advance();
-  ok(parser.hasMoreCommands(), "line 2");
-
-  parser.advance();
-  ok(!parser.hasMoreCommands(), "line 3");
+  ok(!parser.hasMoreCommands(), "check if there's a line 3");
 });
 
 test("commandType recognises A commands", function () {
@@ -171,9 +168,9 @@ test("it removes whitespace and empty lines", function () {
   setInput("\n\n A M   D  = A - 1 ; J    M P  \n\n\n @ 1 1  1 \n\n");
   var parser = new ASSEMBLER.Parser();
 
-  ok(parser.hasMoreCommands());
+  ok(parser.hasMoreCommands(), "check if there's a line 1");
   parser.advance();
-  ok(parser.hasMoreCommands(), "line 1");
+  ok(parser.hasMoreCommands(), "check if there's a line 2");
 
   equal(parser.commandType(), "C_COMMAND", "AMD=A-1;JMP");
   equal(parser.dest(), "AMD", "AMD=A-1;JMP");
@@ -181,13 +178,10 @@ test("it removes whitespace and empty lines", function () {
   equal(parser.jump(), "JMP", "AMD=A-1;JMP");
 
   parser.advance();
-  ok(parser.hasMoreCommands(), "line 2");
+  ok(!parser.hasMoreCommands(), "check if there's a line 3");
 
   equal(parser.commandType(), "A_COMMAND", "@111");
   equal(parser.symbol(), "111", "@111");
-
-  parser.advance();
-  ok(!parser.hasMoreCommands(), "line 3");
 });
 
 test("it removes comments", function () {
@@ -196,7 +190,5 @@ test("it removes comments", function () {
 
   parser.advance();
   equal(parser.symbol(), "123", "@123");
-
-  parser.advance();
-  ok(!parser.hasMoreCommands());
+  ok(!parser.hasMoreCommands(), "check if there's a line 2");
 });
