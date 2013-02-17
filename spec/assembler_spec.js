@@ -6,7 +6,8 @@ test("it assembles the given example correctly", function () {
                M=1    // i=1                  \n\
                @sum                           \n\
                M=0    // sum=0                \n\
-             (LOOP) @i                        \n\
+             (LOOP)                           \n\
+               @i                             \n\
                D=M    // D=i                  \n\
                @100                           \n\
                D=D-A  // D=i-100              \n\
