@@ -196,3 +196,22 @@ test("it removes comments", function () {
 
   ok(!parser.hasMoreCommands(), "check if there's a line 3");
 });
+
+test("reset goes back to the first line", function () {
+  setInput("foo\nbar");
+  var parser = new ASSEMBLER.Parser();
+
+  parser.advance();
+  parser.advance();
+  ok(!parser.hasMoreCommands());
+
+  parser.reset();
+
+  ok(parser.hasMoreCommands());
+  parser.advance();
+
+  ok(parser.hasMoreCommands());
+  parser.advance();
+
+  ok(!parser.hasMoreCommands());
+});
